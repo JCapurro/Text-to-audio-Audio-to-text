@@ -1,12 +1,10 @@
-from gtts import gTTS
-
 from tkinter import *
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfile
-import os,PyPDF2
+import PyPDF2,os,pyaudio
+from gtts import gTTS
 import speech_recognition as sr
-import pyaudio
 
 def language_selection():
     language="a"
@@ -37,7 +35,6 @@ def TextToSpeech(myText):
 
 def SpeechToText(r):
     with sr.Microphone() as source:
-        #duration=int(input("Introduce the time you want to speak: "))
         print("Recognizing...")
         r.adjust_for_ambient_noise(source)
         audio_data = r.listen(source)
@@ -74,13 +71,30 @@ while active:
             print("\nIncorrect option.\n\n\t Select again: \n\t1.From PDF\n\t2.From input ")
 
     elif program=='2':
-        r=sr.Recognizer()
-        text=SpeechToText(r)
-        txt_file=open('output.txt','w')
-        txt_file.write(text)
-        txt_file.close()
-        os.system('start output.txt')
-        print(text)
+        status=True
+        print("\nSelect:\n\t1.From Voice\n\t2.From .mp3")
+        opt=input()
+        os.system("cls")
+        if opt=='1':
+            r=sr.Recognizer()
+            text=SpeechToText(r)
+            txt_file=open('output.txt','w')
+            txt_file.write(text)
+            txt_file.close()
+            os.system('start output.txt')
+        elif opt=='2':
+            os.system('cls')
+            file=askopenfilename()
+            r=sr.Recognizer()
+            with sr.AudioFile(filename) as source:
+                audio_data = r.record(source)
+                text = r.recognize_google(audio_data)
+            txt_file=open('output.txt','w')
+            txt_file.write(text)
+            txt_file.close()
+            os.system('start output.txt')
+
+
     elif program=='3':
         active=False
         print('Closing the app...')
