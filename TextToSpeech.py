@@ -2,9 +2,26 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfile
-import PyPDF2,os,pyaudio
+import PyPDF2,os,pyaudio,subprocess
 from gtts import gTTS
 import speech_recognition as sr
+
+def language_speech():
+    language="a"
+    print("\nSelect:\n\t1.English\n\t2.Spanish\n\t3.Russian\n\t4.Chinese")
+    while language =="a":
+        select = input()
+        if select == '1':
+            language='en-EN'
+        elif select=='2':
+            language='es-ES'
+        elif select=='3':
+            language='ru-RU'
+        elif select=='4':
+            language='zh-ZH'
+        else:
+            print("\nIncorrect option.\n\n\t Select again: \n\t\t1.English\n\t\t2.Spanish\n\t\t3.Russian\n\t\t4.Chinese")
+    return language
 
 def language_selection():
     language="a"
@@ -34,11 +51,12 @@ def TextToSpeech(myText):
     os.startfile(name+'.mp3')
 
 def SpeechToText(r):
+    lang=language_speech()
     with sr.Microphone() as source:
         print("Recognizing...")
         r.adjust_for_ambient_noise(source)
         audio_data = r.listen(source)
-        text = r.recognize_google(audio_data,language='es-ES')
+        text = r.recognize_google(audio_data,language=lang)
     return text
 
 Tk().withdraw()
@@ -72,7 +90,7 @@ while active:
 
     elif program=='2':
         status=True
-        print("\nSelect:\n\t1.From Voice\n\t2.From .mp3")
+        print("\nSelect:\n\t1.From Voice\n\t2.From .wav")
         opt=input()
         os.system("cls")
         if opt=='1':
@@ -86,7 +104,8 @@ while active:
             os.system('cls')
             file=askopenfilename()
             r=sr.Recognizer()
-            with sr.AudioFile(filename) as source:
+            with sr.AudioFile(file) as source:
+                print("Wait until the file is ready to listen.This could take some minutes ")
                 audio_data = r.record(source)
                 text = r.recognize_google(audio_data)
             txt_file=open('output.txt','w')
