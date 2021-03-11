@@ -44,15 +44,15 @@ def TextToSpeech(myText):
     language = language_selection()
     os.system("cls")
     output= gTTS(text=myText,lang=language,slow=False)
-    name=input("Introduce the name of the file: ")
     os.system("cls")
     print("Wait until the file is ready to listen.This could take some minutes ")
-    output.save(name+'.mp3')
-    os.startfile(name+'.mp3')
+    output.save('output.mp3')
+    os.startfile('output.mp3')
 
 def SpeechToText(r):
     lang=language_speech()
     with sr.Microphone() as source:
+        os.system('cls')
         print("Recognizing...")
         r.adjust_for_ambient_noise(source)
         audio_data = r.listen(source)
@@ -62,13 +62,12 @@ def SpeechToText(r):
 Tk().withdraw()
 os.system("cls")
 active=True
-print("\nSelect a program:\n\t1.Text to Audio\n\t2.Audio to Text\n\t3.Exit")
 while active:
+    print("\nSelect a program:\n\t1.Text to Audio\n\t2.Audio to Text\n\t3.Exit")
     program=input()
     os.system("cls")
-    if program=='1':
-        status=True
-        print("\nSelect:\n\t1.From PDF\n\t2.From input")
+    while program=='1':
+        print("\nSelect:\n\t1.From PDF\n\t2.From input\n\t3.Back")
         opt=input()
         os.system("cls")
         if opt=='1':
@@ -85,12 +84,11 @@ while active:
             os.system("cls")
             myText=input("Introduce the text: ")
             TextToSpeech(myText)
-        else:
-            print("\nIncorrect option.\n\n\t Select again: \n\t1.From PDF\n\t2.From input ")
+        elif opt=='3':
+            program='0'
 
-    elif program=='2':
-        status=True
-        print("\nSelect:\n\t1.From Voice\n\t2.From .wav")
+    while program=='2':
+        print("\nSelect:\n\t1.From Voice\n\t2.From .wav\n\t3.Back")
         opt=input()
         os.system("cls")
         if opt=='1':
@@ -100,6 +98,8 @@ while active:
             txt_file.write(text)
             txt_file.close()
             os.system('start output.txt')
+            os.system('cls')
+            os.system
         elif opt=='2':
             os.system('cls')
             file=askopenfilename()
@@ -112,10 +112,12 @@ while active:
             txt_file.write(text)
             txt_file.close()
             os.system('start output.txt')
+            os.system('cls')
+        elif opt=='3':
+            program='0'
 
 
-    elif program=='3':
+    if program=='3':
         active=False
         print('Closing the app...')
-    else:
-        print("Incorrect option. Select again: \n\t1.Text to Audio\n\t2.Audio to Text\n\t3.Exit")
+
